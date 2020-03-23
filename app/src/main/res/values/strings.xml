@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RainCheckDrops</string>
+    <string name="title_home">Home</string>
+    <string name="title_drops">Drops</string>
+    <string name="title_devices">Devices</string>
+    <string name="pick_time">Time</string>
+</resources>
