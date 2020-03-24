@@ -32,7 +32,6 @@ public class AlarmActivity extends Activity {
     public void onStart() {
         super.onStart();
         inst = this;
-        Log.d("TESTING","HELLO WORLD");
     }
 
     @Override

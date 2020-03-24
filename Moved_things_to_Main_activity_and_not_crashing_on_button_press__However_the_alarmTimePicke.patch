@@ -48,7 +48,6 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
 +    }
 +
 +    public void onToggleClicked(View view) {
-+        Log.d("HELLO","WORLD");
 +        try {
 +            if (((ToggleButton) view).isChecked()) {
 +                Log.d("MyActivity", "Alarm On");
@@ -132,7 +131,6 @@ Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
      public void onStart() {
          super.onStart();
          inst = this;
-+        Log.d("TESTING","HELLO WORLD");
      }
  
      @Override
