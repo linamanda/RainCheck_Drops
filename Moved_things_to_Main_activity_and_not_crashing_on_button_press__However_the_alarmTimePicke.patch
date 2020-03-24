@@ -1,0 +1,161 @@
+Index: app/src/main/java/com/example/raincheckdrops/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/raincheckdrops/MainActivity.java	(revision 858bafc7b7805c143a8930525acfbedee17dfcab)
++++ app/src/main/java/com/example/raincheckdrops/MainActivity.java	(date 1585009384119)
+@@ -1,7 +1,17 @@
+ package com.example.raincheckdrops;
+ 
++import android.app.AlarmManager;
++import android.app.PendingIntent;
++import android.content.Intent;
+ import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.widget.TextView;
++import android.widget.TimePicker;
++import android.widget.ToggleButton;
+ 
++import com.example.raincheckdrops.ui.dashboard.AlarmActivity;
++import com.example.raincheckdrops.ui.dashboard.AlarmReceiver;
+ import com.google.android.material.bottomnavigation.BottomNavigationView;
+ 
+ import androidx.appcompat.app.AppCompatActivity;
+@@ -10,7 +20,13 @@
+ import androidx.navigation.ui.AppBarConfiguration;
+ import androidx.navigation.ui.NavigationUI;
+ 
++import java.util.Calendar;
++
+ public class MainActivity extends AppCompatActivity {
++    AlarmManager alarmManager;
++    private PendingIntent pendingIntent;
++    private TimePicker alarmTimePicker;
++    private TextView alarmTextView;
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -25,6 +41,37 @@
+         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+         NavigationUI.setupWithNavController(navView, navController);
++        alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
++        alarmTextView = (TextView) findViewById(R.id.alarmText);
++        ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmToggle);
++        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
++    }
++
++    public void onToggleClicked(View view) {
++        Log.d("HELLO","WORLD");
++        try {
++            if (((ToggleButton) view).isChecked()) {
++                Log.d("MyActivity", "Alarm On");
++                Calendar calendar = Calendar.getInstance();
++                calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
++                calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
++                Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
++                pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, myIntent, 0);
++                alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
++            } else {
++                alarmManager.cancel(pendingIntent);
++                setAlarmText("");
++                Log.d("MyActivity", "Alarm Off");
++            }
++        }catch (Exception e){
++            Log.e("ERROR", e.toString());
++        }
++
++    }
++
++
++    public void setAlarmText(String alarmText) {
++        alarmTextView.setText(alarmText);
+     }
+ 
+ }
+Index: .idea/vcs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/vcs.xml	(date 1584998384736)
++++ .idea/vcs.xml	(date 1584998384736)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="VcsDirectoryMappings">
++    <mapping directory="" vcs="Git" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision 858bafc7b7805c143a8930525acfbedee17dfcab)
++++ .idea/gradle.xml	(date 1584998451234)
+@@ -1,15 +1,19 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="GradleMigrationSettings" migrationVersion="1" />
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <compositeConfiguration>
+-          <compositeBuild compositeDefinitionSource="SCRIPT" />
+-        </compositeConfiguration>
++        <option name="testRunner" value="PLATFORM" />
+         <option name="distributionType" value="DEFAULT_WRAPPED" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
++        <option name="modules">
++          <set>
++            <option value="$PROJECT_DIR$" />
++            <option value="$PROJECT_DIR$/app" />
++          </set>
++        </option>
+         <option name="resolveModulePerSourceSet" value="false" />
+-        <option name="testRunner" value="PLATFORM" />
+       </GradleProjectSettings>
+     </option>
+   </component>
+Index: app/src/main/java/com/example/raincheckdrops/ui/dashboard/AlarmActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/raincheckdrops/ui/dashboard/AlarmActivity.java	(revision 858bafc7b7805c143a8930525acfbedee17dfcab)
++++ app/src/main/java/com/example/raincheckdrops/ui/dashboard/AlarmActivity.java	(date 1585000579916)
+@@ -32,6 +32,7 @@
+     public void onStart() {
+         super.onStart();
+         inst = this;
++        Log.d("TESTING","HELLO WORLD");
+     }
+ 
+     @Override
+@@ -41,6 +42,7 @@
+         alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
+         alarmTextView = (TextView) findViewById(R.id.alarmText);
+         ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmToggle);
++        Log.d("TAG","-------------------------------" + alarmToggle.getContext().toString());
+         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+     }
+ 
+Index: app/src/main/res/layout/fragment_dashboard.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_dashboard.xml	(revision 858bafc7b7805c143a8930525acfbedee17dfcab)
++++ app/src/main/res/layout/fragment_dashboard.xml	(date 1585005994250)
+@@ -29,7 +29,6 @@
+             android:id="@+id/alarmToggle"
+             android:layout_centerHorizontal="true"
+             android:layout_below="@+id/alarmTimePicker"
+-            tools:context=".ui.dashboard.AlarmActivity"
+             android:onClick="onToggleClicked" />
+ 
+         <TextView

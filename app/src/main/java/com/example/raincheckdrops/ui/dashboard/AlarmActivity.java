@@ -32,6 +32,7 @@ public class AlarmActivity extends Activity {
     public void onStart() {
         super.onStart();
         inst = this;
+        Log.d("TESTING","HELLO WORLD");
     }
 
     @Override
@@ -41,6 +42,7 @@ public class AlarmActivity extends Activity {
         alarmTimePicker = (TimePicker) findViewById(R.id.alarmTimePicker);
         alarmTextView = (TextView) findViewById(R.id.alarmText);
         ToggleButton alarmToggle = (ToggleButton) findViewById(R.id.alarmToggle);
+        Log.d("TAG","-------------------------------" + alarmToggle.getContext().toString());
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 

@@ -29,7 +29,6 @@
             android:id="@+id/alarmToggle"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/alarmTimePicker"
-            tools:context=".ui.dashboard.AlarmActivity"
             android:onClick="onToggleClicked" />
 
         <TextView
